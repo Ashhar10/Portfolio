@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Ashhar – Game Developer specializing in AR, VR, and WebGL immersive interactive experiences. Explore my portfolio of cutting-edge 3D projects.">
+  <title>Ashhar | Game Developer – AR, VR & WebGL</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Early Theme Checker -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('portfolio-theme');
+      if (savedTheme === 'light' || (!savedTheme && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+        document.documentElement.classList.add('light-theme');
+      }
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Loader -->
+  <div class="loader-screen" id="loader">
+    <span class="loader-text">Initializing</span>
+    <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
+  </div>
+
+  <!-- Top Navigation -->
+  <nav class="top-nav" id="topNav">
+    <a href="#hero"       data-tooltip="Home"       class="active" id="nav-home"><i class="fa-solid fa-house"></i></a>
+    <a href="#about"      data-tooltip="About"       id="nav-about"><i class="fa-solid fa-user-astronaut"></i></a>
+    <a href="#models"     data-tooltip="3D Models"   id="nav-models"><i class="fa-solid fa-cube"></i></a>
+    <a href="#projects"   data-tooltip="Projects"    id="nav-projects"><i class="fa-solid fa-gamepad"></i></a>
+    <a href="#ar-vr"      data-tooltip="AR / VR"     id="nav-arvr"><i class="fa-solid fa-vr-cardboard"></i></a>
+    <a href="#skills"     data-tooltip="Skills"      id="nav-skills"><i class="fa-solid fa-microchip"></i></a>
+    <a href="#experience" data-tooltip="Experience"  id="nav-exp"><i class="fa-solid fa-timeline"></i></a>
+    <a href="#contact"    data-tooltip="Contact"     id="nav-contact"><i class="fa-solid fa-satellite-dish"></i></a>
+  </nav>
+
+  <!-- Top Right Theme Toggle -->
+  <button id="themeToggle" class="theme-toggle" data-tooltip="Switch Theme" style="position: fixed; top: 30px; right: 40px; z-index: 9999; background: transparent; border: none; color: inherit; font-size: 1.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 72px; height: 72px; border-radius: 50%; transition: all 0.3s ease;">
+    <i class="fa-solid fa-sun" id="themeIcon"></i>
+  </button>
+
+  <!-- Global 3D Gallery Canvas -->
+  <canvas id="gallery-canvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;"></canvas>
+
+  <!-- Particle Text Canvas (Hero Overlay) -->
+  <div class="hero-particle-wrapper" id="heroParticleWrapper" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 1;">
+    <canvas id="particle-canvas"></canvas>
+  </div>
+
+  <!-- Main Content Overlay -->
+  <main class="main-content ui-layer">
+
+    <!-- ====== HERO ZONE ====== -->
+    <section class="section zone-ui" id="hero" data-zone="0">
+      <!-- HTML overlays for tag + buttons -->
+      <div class="hero-content hero-content--overlay">
+        <div class="hero-tag reveal"><span class="pulse"></span> Available for Projects</div>
+        <div class="hero-buttons reveal">
+          <button class="btn-primary btn-magnetic" data-magnetic onclick="document.getElementById('projects').scrollIntoView({behavior:'smooth'})">
+            <span class="btn-ripple"></span>
+            <i class="fa-solid fa-rocket"></i>&nbsp; Explore Work
+          </button>
+          <button class="btn-outline btn-magnetic" data-magnetic id="downloadCvBtn">
+            <span class="btn-ripple"></span>
+            <i class="fa-solid fa-download"></i>&nbsp; Download CV
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== ABOUT ZONE ====== -->
+    <section class="section zone-ui" id="about" data-zone="1">
+      <div class="section-header reveal">
+        <span class="section-label">// About Me</span>
+        <h2 class="section-title" data-fx="glitch">Crafting Digital Worlds</h2>
+        <p class="section-subtitle">With years of experience in game development, I specialize in building immersive 3D experiences using cutting-edge technologies like Unity, Unreal Engine, and WebGL.</p>
+      </div>
+    </section>
+
+    <!-- ====== 3D MODEL VIEWER ZONE ====== -->
+    <section class="section zone-ui" id="models" data-zone="2">
+      <div class="section-header reveal">
+        <span class="section-label">// 3D Showcase</span>
+        <h2 class="section-title" data-fx="wave">Interactive Model Viewer</h2>
+        <p class="section-subtitle">Drag to rotate · Scroll to zoom · Click models to switch</p>
+      </div>
+      <div class="model-viewer-section reveal">
+        <div class="model-canvas-wrapper">
+          <canvas id="model-canvas"></canvas>
+        </div>
+        <div class="model-info">
+          <h3 id="modelTitle">Mech Guardian</h3>
+          <p id="modelDesc">A battle-ready mech unit designed for futuristic combat scenarios. Built with optimized geometry for real-time rendering in game engines.</p>
+          <div class="model-selector">
+            <button class="model-btn active" data-model="robot"><i class="fa-solid fa-robot"></i> Robot</button>
+            <button class="model-btn" data-model="vehicle"><i class="fa-solid fa-shuttle-space"></i> Vehicle</button>
+            <button class="model-btn" data-model="character"><i class="fa-solid fa-person-walking"></i> Character</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== PROJECTS CAROUSEL ZONE ====== -->
+    <section class="section section--full zone-ui" id="projects" data-zone="3">
+      <div class="section-header reveal">
+        <span class="section-label">// Featured Work</span>
+        <h2 class="section-title" data-fx="split">Projects</h2>
+        <p class="section-subtitle">A showcase of immersive games, AR experiences, and 3D visualizations</p>
+      </div>
+      <div id="carousel-3d-container" class="reveal">
+        <!-- The 3D Curved Carousel will be rendered here by carousel-3d.js -->
+        <div class="carousel-3d-controls">
+          <button id="carousel3dPrev"><i class="fa-solid fa-chevron-left"></i></button>
+          <button id="carousel3dNext"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== AR / VR ZONE ====== -->
+    <section class="section zone-ui" id="ar-vr" data-zone="4">
+      <div class="section-header reveal">
+        <span class="section-label">// Extended Reality</span>
+        <h2 class="section-title" data-fx="magnetic">AR & VR Experiences</h2>
+        <p class="section-subtitle">Pushing the boundaries of immersive technology</p>
+      </div>
+      <div class="ar-vr-grid">
+        <!-- AR Card -->
+        <div class="xr-card reveal">
+          <div class="xr-card-bg">
+            <img src="assets/images/ar-phone-mockup.png" alt="AR Experience">
+          </div>
+          <div class="xr-floating-elements">
+            <span class="xr-float-chip"><i class="fa-solid fa-location-crosshairs"></i>&nbsp; Plane Detection</span>
+            <span class="xr-float-chip"><i class="fa-solid fa-hand-pointer"></i>&nbsp; Gesture Control</span>
+            <span class="xr-float-chip"><i class="fa-solid fa-cube"></i>&nbsp; 3D Anchors</span>
+          </div>
+          <div class="xr-card-content">
+            <span class="xr-label">Augmented Reality</span>
+            <h3>AR Experiences</h3>
+            <p>Interactive augmented reality applications that blend digital content seamlessly with the real world.</p>
+            <button class="btn-primary"><i class="fa-solid fa-mobile-screen"></i>&nbsp; Launch AR</button>
+          </div>
+        </div>
+        <!-- VR Card -->
+        <div class="xr-card reveal reveal-delay-2">
+          <div class="xr-card-bg">
+            <img src="assets/images/vr-experience.png" alt="VR Experience">
+          </div>
+          <div class="xr-floating-elements">
+            <span class="xr-float-chip"><i class="fa-solid fa-hand"></i>&nbsp; Hand Tracking</span>
+            <span class="xr-float-chip"><i class="fa-solid fa-headset"></i>&nbsp; 6DOF</span>
+            <span class="xr-float-chip"><i class="fa-solid fa-eye"></i>&nbsp; Eye Tracking</span>
+          </div>
+          <div class="xr-card-content">
+            <span class="xr-label">Virtual Reality</span>
+            <h3>VR Experiences</h3>
+            <p>Fully immersive virtual reality worlds that transport users into breathtaking digital environments.</p>
+            <button class="btn-primary"><i class="fa-solid fa-vr-cardboard"></i>&nbsp; Launch VR</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== SKILLS ZONE ====== -->
+    <section class="section zone-ui" id="skills" data-zone="5">
+      <div class="section-header reveal">
+        <span class="section-label">// Tech Stack</span>
+        <h2 class="section-title" data-fx="bounce">Skills & Tools</h2>
+        <p class="section-subtitle">Technologies I work with daily to build immersive experiences</p>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card reveal"><div class="skill-icon"><i class="fa-brands fa-unity"></i></div><h4>Unity</h4></div>
+        <div class="skill-card reveal reveal-delay-1"><div class="skill-icon"><i class="fa-solid fa-gear"></i></div><h4>Unreal Engine</h4></div>
+        <div class="skill-card reveal reveal-delay-2"><div class="skill-icon"><i class="fa-solid fa-cubes"></i></div><h4>Blender</h4></div>
+        <div class="skill-card reveal reveal-delay-3"><div class="skill-icon"><i class="fa-solid fa-code"></i></div><h4>C#</h4></div>
+        <div class="skill-card reveal reveal-delay-4"><div class="skill-icon"><i class="fa-brands fa-js"></i></div><h4>JavaScript</h4></div>
+        <div class="skill-card reveal"><div class="skill-icon"><i class="fa-solid fa-globe"></i></div><h4>WebGL</h4></div>
+        <div class="skill-card reveal reveal-delay-1"><div class="skill-icon"><i class="fa-solid fa-shapes"></i></div><h4>Three.js</h4></div>
+        <div class="skill-card reveal reveal-delay-2"><div class="skill-icon"><i class="fa-solid fa-vr-cardboard"></i></div><h4>OpenXR</h4></div>
+      </div>
+    </section>
+
+    <!-- ====== EXPERIENCE ZONE ====== -->
+    <section class="section zone-ui" id="experience" data-zone="6">
+      <div class="section-header reveal">
+        <span class="section-label">// Career Path</span>
+        <h2 class="section-title" data-fx="reveal">Experience</h2>
+        <p class="section-subtitle">My journey through the world of game development</p>
+      </div>
+      <div class="timeline-wrapper reveal">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-content-top"><span class="timeline-year">2019</span></div>
+            <div class="timeline-node"></div>
+            <div class="timeline-content-bottom">
+              <div class="timeline-role">Junior Game Dev</div>
+              <div class="timeline-company">Indie Studio</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-content-top"><span class="timeline-year">2020</span></div>
+            <div class="timeline-node"></div>
+            <div class="timeline-content-bottom">
+              <div class="timeline-role">Unity Developer</div>
+              <div class="timeline-company">GameForge Inc</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-content-top"><span class="timeline-year">2021</span></div>
+            <div class="timeline-node"></div>
+            <div class="timeline-content-bottom">
+              <div class="timeline-role">AR/VR Engineer</div>
+              <div class="timeline-company">XR Labs</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-content-top"><span class="timeline-year">2023</span></div>
+            <div class="timeline-node"></div>
+            <div class="timeline-content-bottom">
+              <div class="timeline-role">Lead Game Developer</div>
+              <div class="timeline-company">NexGen Studios</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-content-top"><span class="timeline-year">2025</span></div>
+            <div class="timeline-node"></div>
+            <div class="timeline-content-bottom">
+              <div class="timeline-role">Senior XR Developer</div>
+              <div class="timeline-company">Freelance / Studio</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== FOOTER / CTA ZONE ====== -->
+    <section class="section zone-ui" id="contact" data-zone="7" style="display:flex; flex-direction:column; justify-content:center;">
+      <footer id="footer-content" style="background: none; border: none; padding: 0;">
+      <div class="footer-cta reveal">
+        <h2>Let's Build Something <span class="gradient-text">Amazing</span> Together</h2>
+        <p>Ready to bring your next immersive experience to life? Let's connect.</p>
+        <button class="btn-primary"><i class="fa-solid fa-envelope"></i>&nbsp; Get in Touch</button>
+        <div class="social-links">
+          <a href="#" class="social-link" aria-label="GitHub" id="social-github"><i class="fa-brands fa-github"></i></a>
+          <a href="#" class="social-link" aria-label="LinkedIn" id="social-linkedin"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="#" class="social-link" aria-label="Email" id="social-email"><i class="fa-solid fa-envelope"></i></a>
+          <a href="#" class="social-link" aria-label="Twitter" id="social-twitter"><i class="fa-brands fa-x-twitter"></i></a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Ashhar. All rights reserved. Built with <span class="gradient-text">♥</span> and Three.js
+      </div>
+      </footer>
+    </section>
+
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- Post-Processing Modules -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="js/three-scene.js"></script>
+  <script src="js/particle-text.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/carousel-3d.js"></script>
+</body>
+</html>
